@@ -3,8 +3,8 @@ import Users from './models/users.js';
 class userController {
 
     async userRegistration (req, res) {
-        const { name, last_name, email, password } = req.body
-        const user = new Users({name, last_name, email, password})
+        const { name, lastName, email, password } = req.body
+        const user = new Users({name, lastName, email, password})
         await user.save()
         return res.status(200).json("User added successfully.")
     }
@@ -37,9 +37,22 @@ class userController {
             }
         })
         if (user) {
-            return res.status(200).json('User exist.')
+            return res.status(200).json('User exist. User id: ' + user.id)
         }
         else { return res.status(404).json('User not found.') } 
+    }
+
+    async userFindById (req, res) {
+        const { id } = req.params
+        const user = await Users.findOne({
+            where: {
+                id: id
+            }
+        })
+        if (user) {
+            return res.status(200).json(user)
+        }
+        else { return res.status(404).json('User not found.') }
     }
 
     async userDel (req, res) {
