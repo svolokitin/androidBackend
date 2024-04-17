@@ -1,5 +1,6 @@
 import express from "express"
 import router from "./router.js";
+import cors from 'cors';
 import connectToDB from "./connectionToDB.js";
 
 const PORT = 7777;
