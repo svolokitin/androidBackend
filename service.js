@@ -3,13 +3,20 @@ import Users from './models/users.js';
 class userController {
 
     async userRegistration (req, res) {
-        const { name, lastName, email, password } = req.body
-        const user = new Users({name, lastName, email, password})
-        await user.save()
-        return res.status(200).json("User added successfully.")
+
+        try {
+            const { name, lastName, email, password } = req.body
+            const user = new Users({name, lastName, email, password})
+            await user.save()
+            return res.status(200).json("User added successfully.")
+        }
+        catch (err) {
+            return res.status(500).json(err.message)
+        }
     }
 
     async userLogin (req, res) {
+
         try {
             const { email, password } = req.body
             const user = await Users.findOne({
@@ -30,7 +37,9 @@ class userController {
     }
 
     async userFind (req, res) {
-        const { name } = req.body
+
+        try {
+            const { name } = req.body
         const user = await Users.findOne({
             where: {
                 name: name
@@ -39,23 +48,54 @@ class userController {
         if (user) {
             return res.status(200).json('User exist. User id: ' + user.id)
         }
-        else { return res.status(404).json('User not found.') } 
+        else { return res.status(404).json('User not found.') }
+        }
+        catch (err) {
+            return res.status(500).json(err.message)
+        }
     }
 
     async userFindById (req, res) {
-        const { id } = req.params
-        const user = await Users.findOne({
-            where: {
-                id: id
+
+        try {
+            const { id } = req.params
+            const user = await Users.findOne({
+                where: {
+                    id: id
+                }
+            })
+            if (user) {
+                return res.status(200).json(user)
             }
-        })
-        if (user) {
-            return res.status(200).json(user)
+            else { return res.status(404).json('User not found.') }
         }
-        else { return res.status(404).json('User not found.') }
+        catch (err) {
+            return res.status(500).json(err.message)
+        }
+    }
+
+    async userFindByEmail (req, res) {
+
+        try {
+            const { email } = req.params
+            const candidate = await Users.findOne({
+                where: {
+                    email: email
+                }
+            })
+            
+            if (!candidate) {
+                return res.status(404).json('User is not found!')
+            }
+            else { return res.status(200).json(candidate)}
+        }
+        catch (err) {
+            return res.status(500).json(err.message)
+        }
     }
 
     async userDel (req, res) {
+        
         try {
             const { email, password } = req.body
             const user = await Users.findOne({
