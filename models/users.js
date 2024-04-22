@@ -17,8 +17,8 @@ const Users = await db.define("Users", {
 }
 );
 
-// db.sync({alter: true}).then(()=>{
-// console.log("Tables have been sync");
-// }).catch(err=>console.log(err));
+//db.sync({alter: true}).then(()=>{
+//console.log("Tables have been sync");
+//}).catch(err=>console.log(err));
     
 export default Users;
