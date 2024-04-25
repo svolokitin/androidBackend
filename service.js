@@ -28,7 +28,7 @@ class userController {
                 return res.status(400).json('wrong email or password!')
             }
             else {
-                return res.status(200).json(user, 'Log in successfully.')
+                return res.json(user)
             }
         }
         catch (err) {
